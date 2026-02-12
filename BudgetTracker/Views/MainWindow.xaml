@@ -1,0 +1,55 @@
+<Window x:Class="BudgetTracker.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:BudgetTracker.ViewModels"
+        xmlns:views="clr-namespace:BudgetTracker.Views"
+        mc:Ignorable="d"
+        Title="Budget Tracker" Height="720" Width="1200">
+    <Window.DataContext>
+        <viewModels:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:DashboardViewModel}">
+            <views:DashboardView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:TransactionsViewModel}">
+            <views:TransactionsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:AccountsViewModel}">
+            <views:AccountsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:CategoriesViewModel}">
+            <views:CategoriesView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+            <views:SettingsView/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Background="{DynamicResource CardColor}">
+            <StackPanel Margin="12">
+                <TextBlock Text="Budget Tracker" FontWeight="Bold" FontSize="24" Margin="4 8 4 18"/>
+                <ListBox ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}"
+                         Background="Transparent" BorderThickness="0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding}" Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}" Margin="0 4" Padding="10" HorizontalAlignment="Stretch"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Border>
+
+        <ContentControl Grid.Column="1" Content="{Binding CurrentPage}" Margin="12"/>
+    </Grid>
+</Window>
